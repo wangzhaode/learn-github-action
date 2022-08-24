@@ -5,11 +5,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: npm install -g bats
       - name: build
-      - run: |
+        run: |
             mkdir build && cd build
             cmake ..
             make -j4
       - name: test
-      - run: cd build && ./test/foo_test
+        run: cd build && ./test/foo_test
