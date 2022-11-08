@@ -1,2 +1,2 @@
-# -*- coding: utf-8 -*-
+#-- coding:utf8 --
 print('测试汉字输出')
