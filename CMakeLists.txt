@@ -8,7 +8,7 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}/include/)
 FILE(GLOB FOO_SRC ${CMAKE_CURRENT_LIST_DIR}/src/*)
 
 # target
-add_library(FOO SHARED ${FOO_SRC})
+add_library(FOO STATIC ${FOO_SRC})
 
 # test
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/test)

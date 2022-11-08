@@ -1,0 +1,14 @@
+name: linux-x86
+on: [push]
+jobs:
+  check-bats-version:
+    runs-on: windows-latest 
+    steps:
+      - uses: actions/checkout@v3
+      - name: build
+        run: |
+            mkdir build && cd build
+            cmake -G Ninja .. && ninja
+            ls ./
+      - name: test
+        run: cd build && ./test/foo_test
