@@ -1,8 +1,8 @@
-name: linux-x86
+name: windows
 on: [push]
 jobs:
   check-bats-version:
-    runs-on: windows-latest 
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
       - uses: ilammy/msvc-dev-cmd@v1
