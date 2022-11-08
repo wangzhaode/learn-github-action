@@ -5,10 +5,10 @@ jobs:
     runs-on: windows-latest 
     steps:
       - uses: actions/checkout@v3
+      - uses: ilammy/msvc-dev-cmd@v1
       - name: build
         run: |
             mkdir build && cd build
-            "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x64
             cmake -G Ninja .. && ninja
             ls ./
       - name: test
