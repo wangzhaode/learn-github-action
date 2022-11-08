@@ -1,2 +1,5 @@
 #-- coding:utf8 --
-print('测试汉字输出')
+try:
+    print('测试汉字输出')
+except:
+    print('test output')
