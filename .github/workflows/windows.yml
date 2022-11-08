@@ -8,6 +8,7 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
       - name: build
         run: |
+            python3 test.py
             mkdir build && cd build
             cmake -G Ninja .. && ninja
             ls ./
