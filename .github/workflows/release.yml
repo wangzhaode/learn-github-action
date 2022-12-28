@@ -23,6 +23,7 @@ jobs:
         submodules: true
     - name: package
       run: |
+        ls
         rm -rf .git
         rm -f /tmp/${{ env.PACKAGENAME }}.zip
         zip -9 -y -r /tmp/${{ env.PACKAGENAME }}.zip .
@@ -32,9 +33,9 @@ jobs:
         name: ${{ env.PACKAGENAME }}
         path: /tmp/${{ env.PACKAGENAME }}.zip
 
-  ubuntu-1804:
+  ubuntu-release:
     needs: [setup]
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     env:
       PACKAGENAME: demo-${{ needs.setup.outputs.VERSION }}-ubuntu-1804
     steps:
