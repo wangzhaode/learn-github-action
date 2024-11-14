@@ -1,0 +1,70 @@
+name: test artifacts
+on:
+  push:
+    branches:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  setup:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    outputs:
+      VERSION: ${{ steps.get_version.outputs.VERSION }}
+    steps:
+    - name: get-version
+      id: get_version
+      run: |
+        if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+          # 提取标签版本号
+          echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        else
+          # 如果不是标签，则设置版本为 'dev'
+          echo "VERSION=dev" >> $GITHUB_OUTPUT
+        fi
+
+  upload_artifacts:
+    needs: [setup]
+    name: ${{ matrix.arch }} ${{ matrix.build }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest,    arch: x86_64,     build: 'cp*-manylinux*' }
+          - { os: windows-latest,   arch: AMD64,      build: 'cp*'          }
+          - { os: macos-13,         arch: x86_64,     build: 'cp*'          }
+          - { os: macos-14,         arch: arm64,      build: 'cp*'          }
+
+    steps:
+      - name: create file
+        run: |
+          mkdir foo
+          echo "hello" > foo/${{ matrix.os }}_${{ needs.setup.outputs.VERSION }}_1.txt
+          echo "world" > foo/${{ matrix.os }}_${{ needs.setup.outputs.VERSION }}_2.txt
+
+      - name: upload file
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts-${{ matrix.os }}
+          path: foo/*.txt
+
+  download_artifacts:
+    permissions:
+      contents: none
+    name: dowload artifacts
+    needs: [upload_artifacts]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: download file
+        uses: actions/download-artifact@v4
+        with:
+          pattern: artifacts-*
+          path: dst
+          merge-multiple: true
+
+      - name: show files
+        run: |
+          ls -l dst
